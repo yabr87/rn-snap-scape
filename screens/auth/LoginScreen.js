@@ -26,8 +26,12 @@ const initialState = {
 
 export default function LoginScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [securePas, setSecurePas] = useState(true);
   const [state, setstate] = useState(initialState);
+  const [securePas, setSecurePas] = useState(true);
+  const [isFocused, setIsFocused] = useState({
+    email: false,
+    password: false,
+  });
 
   //fonts
   const [fontsLoaded] = useFonts({
@@ -58,6 +62,19 @@ export default function LoginScreen({ navigation }) {
     Keyboard.dismiss();
   };
 
+  // handlers
+  const handleInputFocus = textinput => {
+    setIsShowKeyboard(true);
+    setIsFocused({
+      [textinput]: true,
+    });
+  };
+  const handleInputBlur = textinput => {
+    setIsFocused({
+      [textinput]: false,
+    });
+  };
+  // handlers
   return (
     <TouchableWithoutFeedback onPress={handleTouch}>
       <View style={styles.container} onLayout={onLayoutRootView}>
@@ -77,8 +94,13 @@ export default function LoginScreen({ navigation }) {
 
             <View style={{ marginTop: 16 }}>
               <TextInput
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
+                style={
+                  isFocused.email
+                    ? [styles.input, styles.inputFocused]
+                    : styles.input
+                }
+                onFocus={() => handleInputFocus('email')}
+                onBlur={() => handleInputBlur('email')}
                 placeholder="E-mail address"
                 textAlign="left"
                 placeholderTextColor="#BDBDBD"
@@ -90,9 +112,14 @@ export default function LoginScreen({ navigation }) {
             </View>
             <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.input}
+                style={
+                  isFocused.password
+                    ? [styles.input, styles.inputFocused]
+                    : styles.input
+                }
                 secureTextEntry={securePas}
-                onFocus={() => setIsShowKeyboard(true)}
+                onFocus={() => handleInputFocus('password')}
+                onBlur={() => handleInputBlur('password')}
                 placeholder="Password"
                 value={state.password}
                 placeholderTextColor="#BDBDBD"
@@ -170,6 +197,10 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 16,
     lineHeight: 19,
+  },
+  inputFocused: {
+    borderColor: '#FF6C00',
+    backgroundColor: '#FFFFFF',
   },
 
   passwordWrapper: {

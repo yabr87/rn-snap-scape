@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import AddButtonIcon from '../../components/svg/AddButtonIcon';
+import Button from '../../components/Button';
 
 //fonts
 import { useCallback } from 'react';
@@ -29,6 +30,12 @@ const initialState = {
 export default function RegisterScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  const [securePas, setSecurePas] = useState(true);
+  const [isFocused, setIsFocused] = useState({
+    nickname: false,
+    email: false,
+    password: false,
+  });
 
   //fonts
   const [fontsLoaded] = useFonts({
@@ -59,6 +66,20 @@ export default function RegisterScreen({ navigation }) {
     Keyboard.dismiss();
   };
 
+  // handlers
+  const handleInputFocus = textinput => {
+    setIsShowKeyboard(true);
+    setIsFocused({
+      [textinput]: true,
+    });
+  };
+  const handleInputBlur = textinput => {
+    setIsFocused({
+      [textinput]: false,
+    });
+  };
+  // handlers
+
   return (
     <TouchableWithoutFeedback onPress={handleTouch}>
       <View style={styles.container} onLayout={onLayoutRootView}>
@@ -86,8 +107,13 @@ export default function RegisterScreen({ navigation }) {
             </View>
             <View>
               <TextInput
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
+                style={
+                  isFocused.nickname
+                    ? [styles.input, styles.inputFocused]
+                    : styles.input
+                }
+                onFocus={() => handleInputFocus('nickname')}
+                onBlur={() => handleInputBlur('nickname')}
                 value={state.nickname}
                 placeholder="login"
                 placeholderTextColor="#BDBDBD"
@@ -98,8 +124,13 @@ export default function RegisterScreen({ navigation }) {
             </View>
             <View style={{ marginTop: 16 }}>
               <TextInput
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
+                style={
+                  isFocused.email
+                    ? [styles.input, styles.inputFocused]
+                    : styles.input
+                }
+                onFocus={() => handleInputFocus('email')}
+                onBlur={() => handleInputBlur('email')}
                 placeholder="E-mail address"
                 textAlign="left"
                 placeholderTextColor="#BDBDBD"
@@ -109,11 +140,16 @@ export default function RegisterScreen({ navigation }) {
                 }
               />
             </View>
-            <View style={{ marginTop: 16 }}>
+            <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.input}
-                secureTextEntry={true}
-                onFocus={() => setIsShowKeyboard(true)}
+                style={
+                  isFocused.password
+                    ? [styles.input, styles.inputFocused]
+                    : styles.input
+                }
+                secureTextEntry={securePas}
+                onFocus={() => handleInputFocus('password')}
+                onBlur={() => handleInputBlur('password')}
                 placeholder="Password"
                 value={state.password}
                 placeholderTextColor="#BDBDBD"
@@ -121,22 +157,25 @@ export default function RegisterScreen({ navigation }) {
                   setstate(prevState => ({ ...prevState, password: value }))
                 }
               />
+              <Button
+                stylesBtn={styles.showBtn}
+                stylesText={styles.showText}
+                text={securePas ? 'Show' : 'Hide'}
+                onPress={() => setSecurePas(!securePas)}
+              />
             </View>
-            <TouchableOpacity
-              style={styles.btn}
-              activeOpacity={0.8}
+            <Button
+              text={'Sign up'}
+              stylesBtn={styles.btn}
+              stylesText={styles.btnText}
               onPress={handleSubmit}
-            >
-              <Text style={styles.btnText}>Sign up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.link}
-              onPress={() => navigation.navigate('Login')}
-            >
-              <Text style={styles.linkText}>
-                Do you already have an account? Sign in.
-              </Text>
-            </TouchableOpacity>
+            />
+            <Button
+              text={'Do you already have an account? Sign in.'}
+              stylesBtn={styles.link}
+              stylesText={styles.linkText}
+              onPress={() => navigation.navigate('Register')}
+            />
           </View>
         </ImageBackground>
       </View>
@@ -164,6 +203,25 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 16,
     lineHeight: 19,
+  },
+
+  inputFocused: {
+    borderColor: '#FF6C00',
+    backgroundColor: '#FFFFFF',
+  },
+  passwordWrapper: {
+    position: 'relative',
+    marginTop: 16,
+  },
+
+  showBtn: {
+    position: 'absolute',
+    right: 16,
+    paddingBottom: 15,
+    paddingTop: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
+    width: 60,
   },
 
   form: {
