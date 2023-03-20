@@ -135,7 +135,7 @@ export default function LoginScreen({ navigation }) {
               />
             </View>
             <Button
-              text={'Sign up'}
+              text={'Sign in'}
               stylesBtn={styles.btn}
               stylesText={styles.btnText}
               onPress={handleSubmit}
