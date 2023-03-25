@@ -14,13 +14,6 @@ import {
 import AddButtonIcon from '../../components/svg/AddButtonIcon';
 import Button from '../../components/Button';
 
-//fonts
-import { useCallback } from 'react';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-SplashScreen.preventAutoHideAsync();
-//fonts
-
 const initialState = {
   email: '',
   password: '',
@@ -36,23 +29,6 @@ export default function RegisterScreen({ navigation }) {
     email: false,
     password: false,
   });
-
-  //fonts
-  const [fontsLoaded] = useFonts({
-    'Roboto-Medium': require('../../assets/fonts/Roboto-Medium.ttf'),
-    'Roboto-Regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-  //fonts
 
   const handleSubmit = () => {
     setIsShowKeyboard(false);
@@ -82,7 +58,7 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={handleTouch}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
+      <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
           source={require('../../assets/images/bg.jpg')}
@@ -174,7 +150,7 @@ export default function RegisterScreen({ navigation }) {
               text={'Do you already have an account? Sign in.'}
               stylesBtn={styles.link}
               stylesText={styles.linkText}
-              onPress={() => navigation.navigate('Register')}
+              onPress={() => navigation.navigate('Login')}
             />
           </View>
         </ImageBackground>

@@ -12,13 +12,6 @@ import {
 
 import Button from '../../components/Button';
 
-//fonts
-import { useCallback } from 'react';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-SplashScreen.preventAutoHideAsync();
-//fonts
-
 const initialState = {
   email: '',
   password: '',
@@ -32,23 +25,6 @@ export default function LoginScreen({ navigation }) {
     email: false,
     password: false,
   });
-
-  //fonts
-  const [fontsLoaded] = useFonts({
-    'Roboto-Medium': require('../../assets/fonts/Roboto-Medium.ttf'),
-    'Roboto-Regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-  //fonts
 
   const handleSubmit = () => {
     setIsShowKeyboard(false);
@@ -77,7 +53,7 @@ export default function LoginScreen({ navigation }) {
   // handlers
   return (
     <TouchableWithoutFeedback onPress={handleTouch}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
+      <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
           source={require('../../assets/images/bg.jpg')}
