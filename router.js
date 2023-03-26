@@ -8,11 +8,15 @@ import PostsScreen from './screens/mainScrens/PostsScreen';
 import CreatePostsScreen from './screens/mainScrens/CreatePostsScreen';
 import ProfileScreen from './screens/mainScrens/ProfileScreen';
 
+import NavPostsIcon from './components/icons/NavPostsIcon';
+import NavAddIcon from './components/icons/NavAddIcon';
+import NavProfileIcon from './components/icons/NavProfileIcon';
+
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-export const router = iaAuth => {
-  if (!iaAuth) {
+export const router = isAuthenticated => {
+  if (!isAuthenticated) {
     return (
       <AuthStack.Navigator>
         <AuthStack.Screen
@@ -34,10 +38,38 @@ export const router = iaAuth => {
   }
 
   return (
-    <MainTab.Navigator>
-      <MainTab.Screen name="Posts" component={PostsScreen} />
-      <MainTab.Screen name="Create Posts" component={CreatePostsScreen} />
-      <MainTab.Screen name="Profile" component={ProfileScreen} />
+    <MainTab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+      }}
+    >
+      <MainTab.Screen
+        name="Posts"
+        component={PostsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <NavPostsIcon name="appstore-o" size={24} focused={focused} />
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name="Create Posts"
+        component={CreatePostsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <NavAddIcon name="plus" size={24} focused={focused} />
+          ),
+        }}
+      />
+      <MainTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <NavProfileIcon name="user" size={24} focused={focused} />
+          ),
+        }}
+      />
     </MainTab.Navigator>
   );
 };
