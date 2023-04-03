@@ -50,6 +50,7 @@ export const router = isAuthenticated => {
           tabBarIcon: ({ focused }) => (
             <NavPostsIcon name="appstore-o" size={24} focused={focused} />
           ),
+          headerStyle: { borderBottomWidth: 1, borderBottomColor: '#eee' },
         }}
       />
       <MainTab.Screen
@@ -59,6 +60,7 @@ export const router = isAuthenticated => {
           tabBarIcon: ({ focused }) => (
             <NavAddIcon name="plus" size={24} focused={focused} />
           ),
+          headerStyle: { borderBottomWidth: 1, borderBottomColor: '#eee' },
         }}
       />
       <MainTab.Screen
@@ -68,6 +70,7 @@ export const router = isAuthenticated => {
           tabBarIcon: ({ focused }) => (
             <NavProfileIcon name="user" size={24} focused={focused} />
           ),
+          headerShown: false,
         }}
       />
     </MainTab.Navigator>

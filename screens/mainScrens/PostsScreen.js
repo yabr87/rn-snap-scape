@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { EvilIcons } from '@expo/vector-icons';
 
 const user = {
   id: '00034242',
@@ -23,7 +22,8 @@ const userPosts = [
     photo: 'https://placekitten.com/g/643/480',
     title: 'My cat',
     location: "Ivano-Frankivs'k Region, Ukraine",
-    comments: '322',
+    comments: '32',
+    likes: '32',
   },
   {
     id: '2',
@@ -31,6 +31,7 @@ const userPosts = [
     title: 'My cat 2',
     location: "Ivano-Frankivs'k Region, Ukraine",
     comments: '88',
+    likes: '32',
   },
   {
     id: '3',
@@ -38,13 +39,14 @@ const userPosts = [
     title: 'My cat 3',
     location: 'Kyiv, Ukraine',
     comments: '98',
+    likes: '32',
   },
 ];
 
 const PostsScreen = ({ navigation }) => {
   const { email, nickname, photo } = user;
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.user}
@@ -114,6 +116,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     marginLeft: 'auto',
     marginRight: 'auto',
+    backgroundColor: '#fff',
   },
   user: {
     flexDirection: 'row',
@@ -147,12 +150,12 @@ const styles = StyleSheet.create({
     padding: 2,
     paddingRight: 8,
   },
-  comments: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+  comments: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4 },
   commentsCount: {
     fontFamily: 'Roboto-Regular',
     color: '#BDBDBD',
   },
-  location: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  location: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   locationText: {
     fontFamily: 'Roboto-Regular',
     textDecorationLine: 'underline',
