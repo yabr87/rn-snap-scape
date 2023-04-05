@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
+import CommentScreen from '../CommentsScreen';
+
 const user = {
   id: '00034242',
   email: 'email@example.com',
@@ -51,7 +53,7 @@ const PostsScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.user}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('Create Posts')}
+          onPress={() => navigation.navigate('Profile')}
         >
           <View style={styles.user}>
             <Image source={{ uri: `${photo}` }} style={styles.userPhoto} />
@@ -67,7 +69,7 @@ const PostsScreen = ({ navigation }) => {
             <TouchableOpacity
               key={id}
               activeOpacity={1}
-              onPress={() => navigation.navigate('Create Posts')}
+              onPress={() => navigation.navigate('Comments')}
             >
               <View style={styles.userPosts}>
                 <Image source={{ uri: `${photo}` }} style={styles.postsPhoto} />
