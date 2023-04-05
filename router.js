@@ -107,6 +107,7 @@ export const router = isAuthenticated => {
         options={({ navigation }) => ({
           tabBarButton: () => null,
           tabBarStyle: { display: 'none' },
+          headerStyle: { borderBottomWidth: 1, borderBottomColor: '#eee' },
           headerLeft: () => (
             <TouchableOpacity
               style={{ marginLeft: 16 }}
