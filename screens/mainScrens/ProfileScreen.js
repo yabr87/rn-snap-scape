@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { SimpleLineIcons, Feather } from '@expo/vector-icons';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -72,6 +72,13 @@ export default function ProfileScreen({ navigation }) {
                 <SimpleLineIcons name="close" size={24} color="#BDBDBD" />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              style={styles.logOutBtn}
+              activeOpacity={0.8}
+              onPress={() => console.log('log out')}
+            >
+              <Feather name="log-out" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
             <Text style={styles.headerText}>Natali Romanova</Text>
           </View>
           <ScrollView nestedScrollEnabled={true}>
@@ -81,7 +88,7 @@ export default function ProfileScreen({ navigation }) {
                 <TouchableOpacity
                   key={id}
                   activeOpacity={1}
-                  onPress={() => navigation.navigate('Create Posts')}
+                  onPress={() => navigation.navigate('Comments')}
                 >
                   <View style={styles.userPosts}>
                     <Image
@@ -186,6 +193,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#212121',
     fontFamily: 'Roboto-Medium',
+  },
+
+  logOutBtn: {
+    position: 'absolute',
+    top: -48,
+    right: 16,
   },
   userPosts: {
     paddingLeft: 26,
