@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,36 +8,87 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { Camera } from 'expo-camera';
+import * as Location from 'expo-location';
+
 import { AntDesign, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 const CreatePostScreen = ({ navigation }) => {
-  const [image, setImage] = useState(`https://placekitten.com/g/643/480`);
-  // const [image, setImage] = useState(null);
+  const cameraRef = useRef();
+  const [status, requestPermission] = Camera.useCameraPermissions();
+  const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState(``);
+  const [coordinates, setCoordinates] = useState({});
   const [isFocused, setIsFocused] = useState({
     title: false,
     location: false,
   });
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      requestPermission(status === 'granted');
+    })();
+  }, []);
+
+  const takePicture = async () => {
+    if (image) return;
+    const image = await cameraRef.current.takePictureAsync();
+    setImage(image.uri);
+  };
+
+  const getLocation = async () => {
+    const location = await Location.getCurrentPositionAsync({});
+    const myCoordinates = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+
+    const locationName = await Location.reverseGeocodeAsync(myCoordinates);
+    const region = locationName?.[0]?.region ?? '';
+    const country = locationName?.[0]?.country ?? '';
+
+    setLocation(`${region}, ${country}`);
+    setCoordinates(myCoordinates);
+  };
+
+  const addPhoto = () => {
+    takePicture();
+    getLocation();
+  };
+
+  const editPhoto = () => {
+    setImage(null);
+  };
+
   const handleSubmit = () => {
-    console.log('submit');
     if (!image || !title) {
       return;
     }
-    console.log('submit');
-    // Handle submission logic here
+    // console.log(coordinates);
+    // console.log(location);
+    // console.log('submit');
+    const nwePost = {
+      image,
+      title,
+      comments: [],
+      likesCount: 0,
+      location,
+      coordinates,
+    };
 
-    // Clear form fields
+    console.log(nwePost);
     handleClear();
-    navigation.goBack();
+    navigation.navigate('Posts', nwePost);
   };
 
   const handleClear = () => {
-    // Clear form fields
     setImage(null);
     setTitle('');
-    setLocation('');
+    setLocation(``);
+    setCoordinates({});
+    setPost({});
   };
 
   // handlers
@@ -56,21 +107,40 @@ const CreatePostScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.imageWrapper}
-        activeOpacity={0.8}
-        onPress={() => console.log('add photo')}
-      >
-        <View style={styles.cameraIconWrapper}>
-          <MaterialIcons
-            style={styles.cameraIcon}
-            name="camera-alt"
-            size={24}
-            color={image ? '#FFFFFF' : '#BDBDBD'}
-          />
+      {!image ? (
+        <Camera ref={cameraRef} style={styles.camera}>
+          <View style={styles.imageWrapper}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => addPhoto()}
+              style={styles.cameraIconWrapper}
+            >
+              <MaterialIcons
+                style={styles.cameraIcon}
+                name="camera-alt"
+                size={24}
+                color={image ? '#FFFFFF' : '#BDBDBD'}
+              />
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      ) : (
+        <View style={styles.imageWrapper}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => editPhoto()}
+            style={styles.cameraIconWrapper}
+          >
+            <MaterialIcons
+              style={styles.cameraIcon}
+              name="camera-alt"
+              size={24}
+              color={image ? '#FFFFFF' : '#BDBDBD'}
+            />
+          </TouchableOpacity>
+          <Image source={{ uri: image }} style={styles.image} />
         </View>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-      </TouchableOpacity>
+      )}
 
       <Text style={styles.text}>{image ? 'Edit photo' : 'Upload a photo'}</Text>
       <View style={styles.inputWrapper}>
@@ -104,12 +174,15 @@ const CreatePostScreen = ({ navigation }) => {
         />
       </View>
       <TouchableOpacity
-        style={[styles.button, !image ? styles.disabledButton : null]}
+        style={[styles.button, !image || !title ? styles.disabledButton : null]}
         activeOpacity={!image ? 1 : 0.8}
         onPress={handleSubmit}
       >
         <Text
-          style={[styles.buttonText, !image ? styles.disabledButtonText : null]}
+          style={[
+            styles.buttonText,
+            !image || !title ? styles.disabledButtonText : null,
+          ]}
         >
           Publish
         </Text>
@@ -129,17 +202,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 16,
   },
+  camera: {
+    width: '100%',
+    height: 230,
+    overflow: 'hidden',
+  },
   imageWrapper: {
     position: 'relative',
     width: '100%',
     height: 230,
     borderWidth: 1,
     borderColor: '#BDBDBD',
-    borderRadius: 8,
-    marginBottom: 8,
+
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F6F6F6',
   },
   image: {
     width: '100%',

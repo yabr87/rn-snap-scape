@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 //fonts
 import { useEffect } from 'react';
@@ -27,6 +28,16 @@ export default function App() {
 
     hideSplashScreen();
   }, [fontsLoaded]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+    })();
+  }, []);
 
   if (!fontsLoaded) {
     return null;
