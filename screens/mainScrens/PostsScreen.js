@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-import CommentScreen from '../CommentsScreen';
-
 const user = {
   id: '00034242',
   email: 'email@example.com',
@@ -45,7 +43,10 @@ const userPosts = [
   },
 ];
 
-const PostsScreen = ({ navigation }) => {
+const PostsScreen = ({ navigation, route }) => {
+  const myPost = route.params;
+
+  console.log('======> пост скрин', myPost);
   const { email, nickname, photo } = user;
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
@@ -63,46 +64,56 @@ const PostsScreen = ({ navigation }) => {
             </View>
           </View>
         </TouchableOpacity>
-        {userPosts.map(post => {
-          const { id, photo, title, location, comments } = post;
-          return (
-            <TouchableOpacity
-              key={id}
-              activeOpacity={1}
-              onPress={() => navigation.navigate('Comments')}
-            >
-              <View style={styles.userPosts}>
-                <Image source={{ uri: `${photo}` }} style={styles.postsPhoto} />
-                <Text style={styles.postsTitle}>{title}</Text>
-                <View style={styles.postInfo}>
-                  <View style={styles.comments}>
-                    <Text style={styles.commentsCount}>{comments}</Text>
-                    <SimpleLineIcons
-                      style={{
-                        transform: [{ rotateY: '180deg' }],
-                      }}
-                      name="bubble"
-                      size={18}
-                      color="#BDBDBD"
-                    />
+        {!myPost ? (
+          <Text>You don't have any posts yet.</Text>
+        ) : (
+          [myPost].map(post => {
+            const { id, image, title, location = '', comments = [] } = post;
+
+            return (
+              <TouchableOpacity
+                key={id}
+                activeOpacity={1}
+                onPress={() => navigation.navigate('Comments', myPost)}
+              >
+                <View style={styles.userPosts}>
+                  <Image
+                    source={{ uri: `${image}` }}
+                    style={styles.postsPhoto}
+                  />
+                  <Text style={styles.postsTitle}>{title}</Text>
+                  <View style={styles.postInfo}>
+                    <View style={styles.comments}>
+                      <Text style={styles.commentsCount}>
+                        {comments.length}
+                      </Text>
+                      <SimpleLineIcons
+                        style={{
+                          transform: [{ rotateY: '180deg' }],
+                        }}
+                        name="bubble"
+                        size={18}
+                        color="#BDBDBD"
+                      />
+                    </View>
+                    <TouchableOpacity
+                      style={styles.location}
+                      activeOpacity={0.8}
+                      onPress={() => navigation.navigate('Map', myPost)}
+                    >
+                      <SimpleLineIcons
+                        name="location-pin"
+                        size={18}
+                        color="#BDBDBD"
+                      />
+                      <Text style={styles.locationText}>{location}</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity
-                    style={styles.location}
-                    activeOpacity={0.8}
-                    onPress={() => navigation.navigate('Profile')}
-                  >
-                    <SimpleLineIcons
-                      name="location-pin"
-                      size={18}
-                      color="#BDBDBD"
-                    />
-                    <Text style={styles.locationText}>{location}</Text>
-                  </TouchableOpacity>
                 </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              </TouchableOpacity>
+            );
+          })
+        )}
       </View>
     </ScrollView>
   );

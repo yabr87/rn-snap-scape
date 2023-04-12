@@ -8,6 +8,7 @@ import PostsScreen from './screens/mainScrens/PostsScreen';
 import CreatePostsScreen from './screens/mainScrens/CreatePostsScreen';
 import ProfileScreen from './screens/mainScrens/ProfileScreen';
 import CommentsScreen from './screens/CommentsScreen';
+import MapScreen from './screens/MapScreen';
 
 import NavPostsIcon from './components/icons/NavPostsIcon';
 import NavAddIcon from './components/icons/NavAddIcon';
@@ -104,6 +105,26 @@ export const router = isAuthenticated => {
       <MainTab.Screen
         name="Comments"
         component={CommentsScreen}
+        options={({ navigation }) => ({
+          tabBarButton: () => null,
+          tabBarStyle: { display: 'none' },
+          headerStyle: { borderBottomWidth: 1, borderBottomColor: '#eee' },
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              activeOpacity={0.8}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Feather name="arrow-left" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <MainTab.Screen
+        name="Map"
+        component={MapScreen}
         options={({ navigation }) => ({
           tabBarButton: () => null,
           tabBarStyle: { display: 'none' },

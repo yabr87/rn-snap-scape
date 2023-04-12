@@ -69,7 +69,9 @@ const CreatePostScreen = ({ navigation }) => {
     // console.log(coordinates);
     // console.log(location);
     // console.log('submit');
+
     const nwePost = {
+      id: `${Date.now()}`,
       image,
       title,
       comments: [],
@@ -78,7 +80,7 @@ const CreatePostScreen = ({ navigation }) => {
       coordinates,
     };
 
-    console.log(nwePost);
+    // console.log(nwePost);
     handleClear();
     navigation.navigate('Posts', nwePost);
   };
@@ -88,7 +90,6 @@ const CreatePostScreen = ({ navigation }) => {
     setTitle('');
     setLocation(``);
     setCoordinates({});
-    setPost({});
   };
 
   // handlers

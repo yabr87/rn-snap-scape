@@ -13,13 +13,14 @@ import { AntDesign } from '@expo/vector-icons';
 
 import Comment from '../components/Comment';
 
-const CommentsScreen = ({ navigate }) => {
+const CommentsScreen = ({ navigate, route }) => {
+  const { image } = route.params || 'https://placekitten.com/g/643/480';
+
   const [commentText, setCommentText] = useState('');
 
   const handleComment = () => {};
 
   const commentsData = {
-    image: 'https://placekitten.com/g/643/480',
     comments: [
       {
         id: '1',
@@ -54,7 +55,7 @@ const CommentsScreen = ({ navigate }) => {
         keyExtractor={item => item.id.toString()}
         ListHeaderComponent={
           <View style={styles.imageWrapper}>
-            <Image source={{ uri: commentsData.image }} style={styles.image} />
+            <Image source={{ uri: image }} style={styles.image} />
           </View>
         }
       />
