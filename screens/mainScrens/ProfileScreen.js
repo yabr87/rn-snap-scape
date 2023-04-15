@@ -13,6 +13,8 @@ import {
 
 import { SimpleLineIcons, Feather } from '@expo/vector-icons';
 
+import { useDispatch } from 'react-redux';
+import { logOutUser } from '../../redux/auth/authOperations';
 const windowHeight = Dimensions.get('window').height;
 
 const userPosts = [
@@ -51,6 +53,7 @@ const userPosts = [
 ];
 
 export default function ProfileScreen({ navigation }) {
+  const dispatch = useDispatch();
   return (
     <ImageBackground
       style={styles.bgImage}
@@ -75,7 +78,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableOpacity
               style={styles.logOutBtn}
               activeOpacity={0.8}
-              onPress={() => console.log('log out')}
+              onPress={() => dispatch(logOutUser())}
             >
               <Feather name="log-out" size={24} color="#BDBDBD" />
             </TouchableOpacity>

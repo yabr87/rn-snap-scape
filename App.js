@@ -1,5 +1,14 @@
 import React from 'react';
+import { useState } from 'react';
+
+import { auth } from './firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+
 import { NavigationContainer } from '@react-navigation/native';
+
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+
 import * as Location from 'expo-location';
 
 //fonts
@@ -12,6 +21,9 @@ SplashScreen.preventAutoHideAsync();
 import { router } from './router';
 
 export default function App() {
+  const [user, setUser] = useState(null);
+  onAuthStateChanged(auth, user => setUser(user));
+
   // fonts
   const [fontsLoaded] = useFonts({
     'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
@@ -44,10 +56,12 @@ export default function App() {
   }
   //fonts
 
-  const routing = router(true);
+  const routing = router(user);
   return (
     <>
-      <NavigationContainer>{routing}</NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>{routing}</NavigationContainer>
+      </Provider>
     </>
   );
 }

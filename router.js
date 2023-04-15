@@ -9,6 +9,7 @@ import CreatePostsScreen from './screens/mainScrens/CreatePostsScreen';
 import ProfileScreen from './screens/mainScrens/ProfileScreen';
 import CommentsScreen from './screens/CommentsScreen';
 import MapScreen from './screens/MapScreen';
+import LogOutScreen from './helpers/LogOutScreen';
 
 import NavPostsIcon from './components/icons/NavPostsIcon';
 import NavAddIcon from './components/icons/NavAddIcon';
@@ -52,7 +53,7 @@ export const router = isAuthenticated => {
       <MainTab.Screen
         name="Posts"
         component={PostsScreen}
-        options={{
+        options={({ navigation }) => ({
           tabBarIcon: ({ focused }) => (
             <NavPostsIcon name="appstore-o" size={24} focused={focused} />
           ),
@@ -61,14 +62,12 @@ export const router = isAuthenticated => {
             <TouchableOpacity
               style={{ marginRight: 16 }}
               activeOpacity={0.8}
-              onPress={() => {
-                console.log('log out');
-              }}
+              onPress={() => navigation.navigate('out')}
             >
               <Feather name="log-out" size={24} color="black" />
             </TouchableOpacity>
           ),
-        }}
+        })}
       />
       <MainTab.Screen
         name="Create Posts"
@@ -140,6 +139,16 @@ export const router = isAuthenticated => {
               <Feather name="arrow-left" size={24} color="black" />
             </TouchableOpacity>
           ),
+        })}
+      />
+      <MainTab.Screen
+        name="out"
+        component={LogOutScreen}
+        options={() => ({
+          tabBarButton: () => null,
+          headerShown: false,
+          tabBarStyle: { display: 'none' },
+          headerStyle: { borderBottomWidth: 1, borderBottomColor: '#eee' },
         })}
       />
     </MainTab.Navigator>

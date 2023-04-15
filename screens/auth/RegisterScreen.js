@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../redux/auth/authOperations';
 
 import {
   StyleSheet,
@@ -17,22 +19,24 @@ import Button from '../../components/Button';
 const initialState = {
   email: '',
   password: '',
-  nickname: '',
+  name: '',
 };
 
 export default function RegisterScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
   const [securePas, setSecurePas] = useState(true);
   const [isFocused, setIsFocused] = useState({
-    nickname: false,
+    name: false,
     email: false,
     password: false,
   });
 
   const handleSubmit = () => {
-    setIsShowKeyboard(false);
     Keyboard.dismiss();
+    setIsShowKeyboard(false);
+    dispatch(registerUser(state));
     console.log('Regaster Form', state);
     setstate(initialState);
   };
@@ -84,17 +88,17 @@ export default function RegisterScreen({ navigation }) {
             <View>
               <TextInput
                 style={
-                  isFocused.nickname
+                  isFocused.name
                     ? [styles.input, styles.inputFocused]
                     : styles.input
                 }
-                onFocus={() => handleInputFocus('nickname')}
-                onBlur={() => handleInputBlur('nickname')}
-                value={state.nickname}
+                onFocus={() => handleInputFocus('name')}
+                onBlur={() => handleInputBlur('name')}
+                value={state.name}
                 placeholder="login"
                 placeholderTextColor="#BDBDBD"
                 onChangeText={value =>
-                  setstate(prevState => ({ ...prevState, nickname: value }))
+                  setstate(prevState => ({ ...prevState, name: value }))
                 }
               />
             </View>

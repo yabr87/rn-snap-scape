@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logInUser } from '../../redux/auth/authOperations';
 
 import {
   StyleSheet,
@@ -18,6 +20,7 @@ const initialState = {
 };
 
 export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
   const [securePas, setSecurePas] = useState(true);
@@ -29,6 +32,7 @@ export default function LoginScreen({ navigation }) {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(logInUser(state));
     console.log('Login Form', state);
     setstate(initialState);
   };
